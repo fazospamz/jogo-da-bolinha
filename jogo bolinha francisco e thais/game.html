@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo do Peixe</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #3021ff; 
+            font-family: 'Arial', sans-serif;
+            color: #ecf0f1;
+        }
+        #container {
+            width: 800px; 
+            height: 400px; 
+            position: relative;
+            border: 5px solid #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            background-image: url("img/oceano.jpg"); 
+            background-size: cover;
+            background-position: center;
+        }
+        #peixe {
+            width: 80px; 
+            height: auto; 
+            position: absolute;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        #peixe:hover {
+            transform: scale(1.2);
+        }
+        h1, #score, #timer {
+            text-align: center;
+            margin: 10px 0;
+        }
+        #playButton {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #3498db, #1abc9c);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+        #playButton:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+        #playButton:active {
+            background-color: #1c6691;
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+<h1 id="welcomeMessage"></h1>
+<div id="score">Pontuação: 0</div>
+<div id="timer">Tempo: 60</div>
+<button id="playButton">Play</button>
+<div id="container">
+    <img id="peixe" src="img/peixe.png" alt="Peixe"> 
+</div>
+
+<script>
+    const peixe = document.getElementById('peixe');
+    const container = document.getElementById('container');
+    const scoreDisplay = document.getElementById('score');
+    const timerDisplay = document.getElementById('timer');
+    const playButton = document.getElementById('playButton');
+    const welcomeMessage = document.getElementById('welcomeMessage');
+    let score = 0;
+    let timer = 60;
+    let moverPeixeInterval;
+    let timerInterval;
+
+    const playerName = localStorage.getItem('playerName');
+    if (playerName) {
+        welcomeMessage.textContent = `Bem-vindo, ${playerName}!`;
+    } else {
+        alert('Nome do jogador não encontrado. Por favor, faça login novamente.');
+        window.location.href = 'login.html';
+    }
+
+    function moverPeixe() {
+        const maxX = container.clientWidth - peixe.clientWidth;
+        const maxY = container.clientHeight - peixe.clientHeight;
+        const x = Math.random() * maxX;
+        const y = Math.random() * maxY;
+
+        peixe.style.left = `${x}px`;
+        peixe.style.top = `${y}px`;
+    }
+
+    peixe.addEventListener('click', function() {
+        score++;
+        scoreDisplay.textContent = `Pontuação: ${score}`;
+        moverPeixe();
+    });
+
+    playButton.addEventListener('click', function() {
+        score = 0;
+        timer = 60;
+        scoreDisplay.textContent = `Pontuação: ${score}`;
+        timerDisplay.textContent = `Tempo: ${timer}`;
+        peixe.style.display = 'block';
+
+        clearInterval(moverPeixeInterval);
+        clearInterval(timerInterval);
+        
+        moverPeixeInterval = setInterval(moverPeixe, 900);
+        
+        timerInterval = setInterval(function() {
+            timer--;
+            timerDisplay.textContent = `Tempo: ${timer}`;
+            if (timer <= 0) {
+                clearInterval(moverPeixeInterval);
+                clearInterval(timerInterval);
+                peixe.style.display = 'none';
+                alert(`Tempo esgotado! Sua pontuação final é: ${score}`);
+            }
+        }, 1000);
+        
+        moverPeixe();
+    });
+
+    peixe.style.display = 'none';
+</script>
+
+</body>
+</html>

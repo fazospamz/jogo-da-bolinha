@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to bottom right, #2c3e50, #4ca1af);
+            font-family: 'Arial', sans-serif;
+            color: #ecf0f1;
+        }
+        #loginContainer {
+            text-align: center;
+        }
+        #loginInput {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 16px;
+            width: 200px;
+        }
+        #loginButton {
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+            margin-top: 20px; 
+        }
+        #loginButton:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+<div id="loginContainer">
+    <h1>Bem-vindo!</h1>
+    <input type="text" id="loginInput" placeholder="Digite seu nome" />
+    <button id="loginButton">Entrar</button>
+</div>
+
+<script>
+    const loginButton = document.getElementById('loginButton');
+    const loginInput = document.getElementById('loginInput');
+
+    loginButton.addEventListener('click', function() {
+        const playerName = loginInput.value.trim();
+        if (playerName) {
+            
+            localStorage.setItem('playerName', playerName);
+            
+            window.location.href = 'game.html';
+        } else {
+            alert('Por favor, insira seu nome!');
+        }
+    });
+</script>
+
+</body>
+</html>
